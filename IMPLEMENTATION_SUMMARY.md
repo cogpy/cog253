@@ -206,10 +206,12 @@ python3 example_atomese_queries.py
 
 ## Future Enhancements
 
-Potential extensions:
-1. Individual pattern files (one .scm per pattern)
-2. Additional pattern properties (diagrams, examples)
-3. Pattern relationship types (conflicts, complements)
+✅ **Completed Enhancements:**
+1. ✅ Individual pattern files (one .scm per pattern) - See `opencog_atomese/patterns/` directory
+2. ✅ Additional pattern properties (diagrams, examples) - See `pattern_language_enhanced.scm`
+3. ✅ Pattern relationship types (conflicts, complements) - See `relationship_types.scm`
+
+**Remaining Potential Extensions:**
 4. PLN reasoning rules
 5. Graph visualizations
 6. Web query interface
