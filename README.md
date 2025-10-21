@@ -15,3 +15,43 @@ The `markdown/` directory contains converted versions of all APL and UIA pages i
 - **`markdown/uia/`**: 253 UIA Patterns & Metaphors (12610010.md - 12612530.md)
 
 See `markdown/README.md` for detailed information about the conversion process and markdown structure.
+
+## Pattern Language Schema
+
+The repository includes a formalized JSON schema for the Pattern Language:
+
+- **Pattern Language Schema** (`pattern_language_generated.json`) - Complete meta-pattern, categories, and sequences
+- **Pattern Sequences** (`pattern_sequences.json`) - All 36 pattern sequences with emergent phenomena
+- **Categories** (`category_*.json`) - Towns, Buildings, and Construction categories
+
+See `PATTERN_SCHEMA_README.md` for detailed information about the schema structure.
+
+## OpenCog Atomese Representation
+
+The Pattern Language has been converted to OpenCog's Atomese format for knowledge representation and pattern matching:
+
+- **`opencog_atomese/`** - Complete Atomese hypergraph representation in Scheme format
+  - `pattern_language.scm` - Complete representation
+  - `meta_pattern.scm` - Meta-pattern
+  - `categories.scm` - Categories with InheritanceLinks
+  - `sequences.scm` - Sequences with MemberLinks
+
+The Atomese format enables:
+- Pattern matching and reasoning in OpenCog
+- Hypergraph queries for pattern relationships
+- Knowledge graph navigation and inference
+- Integration with AI/AGI systems
+
+See `opencog_atomese/README.md` for usage examples and pattern matching queries.
+
+### Generating Atomese Files
+
+```bash
+python3 generate_opencog_atomese.py
+```
+
+### Testing Atomese Files
+
+```bash
+python3 test_opencog_atomese.py
+```
