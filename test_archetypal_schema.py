@@ -66,13 +66,14 @@ def test_patterns_collection():
     assert "meta" in data, "✗ Missing meta section"
     meta = data["meta"]
     assert "total_patterns" in meta, "✗ Missing total_patterns in meta"
-    assert meta["total_patterns"] == 102, f"✗ Expected 102 patterns, got {meta['total_patterns']}"
+    # Updated: Now includes all 253 UIA patterns with domain content
+    assert meta["total_patterns"] == 253, f"✗ Expected 253 patterns, got {meta['total_patterns']}"
     print(f"✓ Meta information correct: {meta['total_patterns']} patterns")
     
     # Check patterns array
     assert "patterns" in data, "✗ Missing patterns array"
     patterns = data["patterns"]
-    assert len(patterns) == 102, f"✗ Expected 102 patterns, got {len(patterns)}"
+    assert len(patterns) == 253, f"✗ Expected 253 patterns, got {len(patterns)}"
     print(f"✓ Patterns array has {len(patterns)} entries")
     
     # Check placeholder definitions
@@ -182,8 +183,8 @@ def test_pattern_ids_unique():
 
 
 def test_all_arc_files_processed():
-    """Test that all arc markdown files were processed."""
-    print("\n=== Testing Coverage of Arc Files ===")
+    """Test that all pattern files were processed."""
+    print("\n=== Testing Coverage of Pattern Files ===")
     
     arc_dir = Path("markdown/arc")
     arc_files = list(arc_dir.glob("arc_*.md"))
@@ -196,9 +197,14 @@ def test_all_arc_files_processed():
     print(f"✓ Found {len(arc_files)} arc markdown files")
     print(f"✓ Processed {len(processed_files)} patterns")
     
-    # Check that we processed the expected number
-    assert len(patterns) == 102, f"✗ Expected 102 patterns, got {len(patterns)}"
-    print(f"✓ All 102 archetypal patterns processed")
+    # Updated: Now includes all 253 UIA patterns with domain content
+    assert len(patterns) == 253, f"✗ Expected 253 patterns, got {len(patterns)}"
+    print(f"✓ All 253 patterns processed (including 102 archetypal and 151 UIA)")
+    
+    # Verify domain content is present
+    with_domain_content = sum(1 for p in patterns if 'domain_specific_content' in p)
+    assert with_domain_content == 253, f"✗ Expected 253 patterns with domain content, got {with_domain_content}"
+    print(f"✓ All patterns have domain-specific content from UIA sources")
 
 
 def run_all_tests():
