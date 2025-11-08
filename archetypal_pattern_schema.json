@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Archetypal Pattern Schema",
+  "description": "Schema for UIA Archetypal Patterns with domain-specific placeholders",
+  "type": "object",
+  "definitions": {
+    "ArchetypalPattern": {
+      "type": "object",
+      "properties": {
+        "pattern_id": {
+          "type": "string",
+          "pattern": "^\\d+$",
+          "description": "UIA pattern identifier (e.g., '12610010')"
+        },
+        "name": {
+          "type": "string",
+          "description": "Pattern name"
+        },
+        "archetypal_pattern": {
+          "type": "string",
+          "description": "Pattern text with {{placeholder}} format for domain-specific terms"
+        },
+        "original_template": {
+          "type": "string",
+          "description": "Original template text without placeholders"
+        },
+        "placeholders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of placeholder names used in this pattern"
+        },
+        "domain_mappings": {
+          "type": "object",
+          "description": "Mapping of placeholders to domain-specific terms",
+          "patternProperties": {
+            "^[a-z-]+$": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]+$": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "source_file": {
+          "type": "string",
+          "description": "Source markdown file name"
+        }
+      },
+      "required": [
+        "pattern_id",
+        "name",
+        "archetypal_pattern",
+        "placeholders"
+      ],
+      "additionalProperties": false
+    },
+    "DomainMapping": {
+      "type": "object",
+      "properties": {
+        "placeholder": {
+          "type": "string",
+          "description": "Placeholder name (without {{ }})"
+        },
+        "domains": {
+          "type": "object",
+          "properties": {
+            "physical": {
+              "type": "string"
+            },
+            "social": {
+              "type": "string"
+            },
+            "conceptual": {
+              "type": "string"
+            },
+            "psychic": {
+              "type": "string"
+            }
+          },
+          "description": "Domain-specific mappings for this placeholder"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of what this placeholder represents"
+        }
+      },
+      "required": [
+        "placeholder",
+        "domains"
+      ]
+    },
+    "ArchetypalPatternCollection": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "total_patterns": {
+              "type": "integer"
+            },
+            "source_directory": {
+              "type": "string"
+            },
+            "format": {
+              "type": "string"
+            }
+          }
+        },
+        "patterns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ArchetypalPattern"
+          }
+        },
+        "placeholder_definitions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DomainMapping"
+          }
+        }
+      },
+      "required": [
+        "meta",
+        "patterns"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/ArchetypalPattern"
+    },
+    {
+      "$ref": "#/definitions/DomainMapping"
+    },
+    {
+      "$ref": "#/definitions/ArchetypalPatternCollection"
+    }
+  ]
+}
