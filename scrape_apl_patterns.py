@@ -13,7 +13,9 @@ from typing import Dict, List, Any, Optional
 import urllib.request
 from html.parser import HTMLParser
 
+# Constants
 BASE_URL = "https://www.iwritewordsgood.com/apl/patterns/"
+PATTERN_URL_FORMAT = "apl{:03d}.htm"
 
 
 class APLPatternParser(HTMLParser):
@@ -79,7 +81,7 @@ class APLPatternParser(HTMLParser):
 
 def fetch_pattern_html(pattern_num: int) -> str:
     """Fetch pattern HTML from the website."""
-    url = f"{BASE_URL}apl{pattern_num:03d}.htm"
+    url = f"{BASE_URL}{PATTERN_URL_FORMAT.format(pattern_num)}"
     try:
         req = urllib.request.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')

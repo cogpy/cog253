@@ -15,6 +15,11 @@ import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
+# Constants for pattern categorization
+PATTERN_TOWNS_END = 94  # Patterns 1-94 are Towns (** asterisks)
+PATTERN_BUILDINGS_END = 204  # Patterns 95-204 are Buildings (* asterisks)
+PATTERN_TOTAL = 253  # Total number of patterns (205-253 are Construction, no asterisks)
+
 
 def extract_pattern_from_markdown(filepath: Path) -> Optional[Dict[str, Any]]:
     """Extract pattern information from a markdown file."""
@@ -38,9 +43,9 @@ def extract_pattern_from_markdown(filepath: Path) -> Optional[Dict[str, Any]]:
     # ** = patterns 1-94 (Towns - most important)
     # * = patterns 95-204 (Buildings)
     # no asterisk = patterns 205-253 (Construction)
-    if pattern_num <= 94:
+    if pattern_num <= PATTERN_TOWNS_END:
         asterisks = 2
-    elif pattern_num <= 204:
+    elif pattern_num <= PATTERN_BUILDINGS_END:
         asterisks = 1
     else:
         asterisks = 0
@@ -159,17 +164,17 @@ def populate_category_files(patterns: List[Dict[str, Any]]):
     categories = [
         {
             "name": "Towns",
-            "range": (1, 94),
+            "range": (1, PATTERN_TOWNS_END),
             "description": "Patterns that define towns and communities. These patterns can never be designed or built in one fell swoop - but patient piecemeal growth, designed in such a way that every individual act is always helping to create or generate these larger global patterns, will, slowly and surely, over the months and years, make a community that has these global patterns in it."
         },
         {
             "name": "Buildings", 
-            "range": (95, 204),
+            "range": (PATTERN_TOWNS_END + 1, PATTERN_BUILDINGS_END),
             "description": "Patterns that give shape to groups of buildings and individual buildings in three dimensions."
         },
         {
             "name": "Construction",
-            "range": (205, 253),
+            "range": (PATTERN_BUILDINGS_END + 1, PATTERN_TOTAL),
             "description": "Patterns that create buildable buildings directly from rough schemes of spaces. These patterns give you the exact geometry of the built up elements which define the spaces."
         }
     ]
@@ -217,7 +222,7 @@ def populate_pattern_json():
     markdown_dir = Path('markdown/apl')
     patterns = []
     
-    for i in range(1, 254):
+    for i in range(1, PATTERN_TOTAL + 1):
         md_file = markdown_dir / f"apl{i:03d}.md"
         if md_file.exists():
             pattern = extract_pattern_from_markdown(md_file)
@@ -252,13 +257,21 @@ def populate_pattern_json():
     # Validation
     print("\nValidation:")
     print(f"  - Total patterns: {len(patterns)}")
-    print(f"  - Expected: 253")
-    print(f"  - Match: {'✓ YES' if len(patterns) == 253 else '✗ NO'}")
+    print(f"  - Expected: {PATTERN_TOTAL}")
+    print(f"  - Match: {'✓ YES' if len(patterns) == PATTERN_TOTAL else '✗ NO'}")
     
-    # Show some statistics
-    with_problem = sum(1 for p in patterns if p.get('problem'))
-    with_solution = sum(1 for p in patterns if p.get('solution'))
-    with_context = sum(1 for p in patterns if p.get('context'))
+    # Show content statistics in a single pass
+    with_problem = 0
+    with_solution = 0
+    with_context = 0
+    
+    for p in patterns:
+        if p.get('problem'):
+            with_problem += 1
+        if p.get('solution'):
+            with_solution += 1
+        if p.get('context'):
+            with_context += 1
     
     print(f"\nContent statistics:")
     print(f"  - Patterns with problem: {with_problem}/{len(patterns)}")
